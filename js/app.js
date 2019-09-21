@@ -17,9 +17,12 @@
  * Define Global Variables
  *
  */
+const header = document.getElementsByClassName("page__header")[0];
 const navBar = document.getElementById("navbar__list");
 const sections = document.querySelectorAll("section[data-nav]");
 let menuItems = null;
+let isScrollingOn = false;
+
 /**
  * End Global Variables
  * Start Helper Functions
@@ -108,6 +111,15 @@ const buildMenu = () => {
 };
 
 /**
+ * Hide the navigation menu
+ */
+const autoHideMenu = () => {
+  // we set back isScrollingOn to false and hide header that contains navigation also
+  isScrollingOn = false;
+  header.classList.add("hidden")
+};
+
+/**
  * Add class "active" to section that is near top of viewport
  */
 const activateMenuForMostVisibleSection = () => {
@@ -121,6 +133,17 @@ const activateMenuForMostVisibleSection = () => {
       menu.classList.remove("active");
     }
   })
+};
+
+const showMenu = () => {
+  if (!isScrollingOn) {
+    // we set isScrollingOn to true and show header with navigation
+    isScrollingOn = true;
+    header.classList.remove("hidden");
+
+    // we want to hide again the animation after one second
+    setTimeout(autoHideMenu, 1000);
+  }
 };
 
 /**
@@ -152,3 +175,6 @@ navBar.addEventListener("click", scrollToClickedMenuItem);
 
 // Set sections as active
 document.addEventListener("scroll", activateMenuForMostVisibleSection);
+
+// Set menu visible when we scroll
+document.addEventListener("scroll", showMenu);
