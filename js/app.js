@@ -17,14 +17,14 @@
  * Define Global Variables
  *
  */
-
+const navBar = document.getElementById("navbar__list");
+const sections = document.querySelectorAll("section[data-nav]");
 
 /**
  * End Global Variables
  * Start Helper Functions
  *
  */
-
 
 
 /**
@@ -34,7 +34,20 @@
  */
 
 // build the nav
-
+const buildMenu = () => {
+  const menuFragment = document.createDocumentFragment();
+  for (const section of sections) {
+    const menuItem = document.createElement("li");
+    const sectionId = section.getAttribute("id");
+    menuItem.innerHTML = `
+      <a class="menu__link" href="#${sectionId}">
+        ${section.dataset.nav}
+      </a>
+    `;
+    menuFragment.appendChild(menuItem);
+  }
+  navBar.appendChild(menuFragment);
+};
 
 // Add class 'active' to section when near top of viewport
 
@@ -49,6 +62,7 @@
  */
 
 // Build menu
+buildMenu();
 
 // Scroll to section on link click
 
