@@ -20,8 +20,10 @@
 const header = document.getElementsByClassName("page__header")[0];
 const navBar = document.getElementById("navbar__list");
 const sections = document.querySelectorAll("section[data-nav]");
+const scrollToTopButton = document.getElementsByClassName("scroll__top_button")[0];
 let menuItems = null;
 let isScrollingOn = false;
+let isScrollToTopButtonVisible = false;
 
 /**
  * End Global Variables
@@ -116,8 +118,22 @@ const buildMenu = () => {
 const autoHideMenu = () => {
   // we set back isScrollingOn to false and hide header that contains navigation also
   isScrollingOn = false;
-  header.classList.add("hidden")
+  header.classList.add("hidden");
 };
+
+/**
+ * Show or hide scrollToTop button
+ */
+const toggleScrollToTopButton = () => {
+  // we decide if we scrolled below the fold of the page or not and set visibility accordingly
+  isScrollToTopButtonVisible = window.scrollY > window.innerHeight / 2;
+  if (isScrollToTopButtonVisible) {
+    scrollToTopButton.classList.add("visible");
+  } else {
+    scrollToTopButton.classList.remove("visible");
+  }
+};
+
 
 /**
  * Add class "active" to section that is near top of viewport
@@ -178,3 +194,6 @@ document.addEventListener("scroll", activateMenuForMostVisibleSection);
 
 // Set menu visible when we scroll
 document.addEventListener("scroll", showMenu);
+
+// On scroll we also need to check if we show the ScrollToTop button or not
+document.addEventListener("scroll", toggleScrollToTopButton);

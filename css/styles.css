@@ -122,6 +122,46 @@ section {
   color: #fff;
 }
 
+/* Scroll to top button styles */
+.scroll__top_button {
+  background: #fff;
+  border: 0;
+  border-radius: 9999px;
+  bottom: 32px;
+  box-sizing: border-box;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  color: rgba(0,0,0,.87);
+  cursor: pointer;
+  height: 56px;
+  margin: 0;
+  outline: 0;
+  opacity: 0;
+  padding: 0;
+  position: fixed;
+  right: 15px;
+  text-align: center;
+  visibility: hidden;
+  width: 56px;
+}
+
+.scroll__top_button:hover {
+  transition: all 0.2s ease;
+  transform: translateY(-2px);
+}
+
+.scroll__top_button.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 1s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.scroll__top_button svg {
+  display: inline-block;
+}
+
+.scroll__top_button svg path {
+  fill: #000;
+}
 
 /* ---- Theme Rules ---- */
 /* Landing Container Styles */
