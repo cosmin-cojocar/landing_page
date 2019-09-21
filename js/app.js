@@ -46,12 +46,49 @@ const getIndexOfMinPositiveBounding = (sectionsArray) => {
 };
 
 /**
+ * Checks to see if an event target is a our element or if it's a parent or ancestor to this one
+ *
+ * @param {Object} element - Element for whom we do the checking.
+ * @param {EventTarget} target - Event target that we want to check.
+ * @return {boolean} true if event target is same as element or a parent/ancestor for this one, false otherwise
+ */
+const checkElementGenetics = (element, node) => {
+  while (node.parentNode) {
+    if (node === element) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
+};
+
+/**
+ * Return index of clicked menu item.
+ *
+ * @param {Event} event - Click event.
+ * @param {Array} menuArray - Array that contains menu items elements.
+ * @return {Number} representing index of clicked menu item.
+ */
+const getIndexForMenuItemThatWasClicked = (event, menuArray) => {
+  const target = (event && event.target) || (event && event.srcElement);
+
+  // we build a "menuStates" array where we check if click was made on a menu item and
+  // if so we flag as true index corresponding to that menu item and false to others
+  const menuStates = menuArray.map((menu) => checkElementGenetics(menu, target));
+
+  // return index of minimum positive bounding to know which menu item we should make active
+  return menuStates.findIndex(item => item === true);
+};
+
+/**
  * End Helper Functions
  * Begin Main Functions
  *
  */
 
-// build the nav
+/**
+ * Build the navigation menus
+ */
 const buildMenu = () => {
   const menuFragment = document.createDocumentFragment();
   for (const section of sections) {
@@ -70,7 +107,9 @@ const buildMenu = () => {
   menuItems = document.querySelectorAll("a.menu__link");
 };
 
-// Add class "active" to section when near top of viewport
+/**
+ * Add class "active" to section that is near top of viewport
+ */
 const activateMenuForMostVisibleSection = () => {
   const indexOfMinBounding = getIndexOfMinPositiveBounding([...sections]);
 
@@ -84,8 +123,20 @@ const activateMenuForMostVisibleSection = () => {
   })
 };
 
-// Scroll to anchor ID using scrollTO event
+/**
+ * Scroll to section that corresponds to clicked menu item
+ */
+const scrollToClickedMenuItem = (event) => {
+  event.preventDefault();
 
+  // we find the index for menu item that was clicked based on event
+  const indexOfClickedMenuItem = getIndexForMenuItemThatWasClicked(event, [...menuItems]);
+
+  // knowing index of clicked menu item we are able to scroll to section that corresponds to this menu item
+  const menuSection = sections[indexOfClickedMenuItem];
+  const sectionTopBounding = menuSection.getBoundingClientRect().top;
+  window.scrollTo({ top: window.scrollY + sectionTopBounding - 1, left: 0 });
+};
 
 /**
  * End Main Functions
@@ -97,6 +148,7 @@ const activateMenuForMostVisibleSection = () => {
 buildMenu();
 
 // Scroll to section on link click
+navBar.addEventListener("click", scrollToClickedMenuItem);
 
 // Set sections as active
 document.addEventListener("scroll", activateMenuForMostVisibleSection);
