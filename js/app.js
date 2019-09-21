@@ -134,6 +134,12 @@ const toggleScrollToTopButton = () => {
   }
 };
 
+/**
+ * Scroll to top function
+ */
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
 
 /**
  * Add class "active" to section that is near top of viewport
